@@ -1,50 +1,83 @@
-import 'dart:convert';
-import 'product.dart';
-import 'product_manager.dart';
-
-void testFactoryFromJson() {
-  print('--- Test 1: Khởi tạo sản phẩm từ chuỗi JSON ---');
-  String jsonString = '{"id": "P05", "name": "Tai nghe Sony WH-1000XM5", "image": "sony_wh.png", "price": 350.0}';
-  Map<String, dynamic> parsedJson = jsonDecode(jsonString);
-  Product newProduct = Product.fromJson(parsedJson);
-  print('Sản phẩm từ JSON factory: $newProduct\n');
-
-  // Test luôn hàm add(product)
-  ProductManager.add(newProduct);
-}
-
-void testEditAndFind() {
-  print('\n--- Test 2: Chỉnh sửa và Tìm kiếm (Find) ---');
-  // Sửa sản phẩm P02
-  ProductManager.edit('P02', newName: 'iPhone 15 Pro Max', newPrice: 1099.0);
-  ProductManager.printAll();
-
-  // Tìm kiếm chính xác (Find)
-  var found = ProductManager.find('P03');
-  print('Kết quả Find ID P03 -> $found\n');
-}
-
-void testSearchAndIncreasePrice() {
-  print('--- Test 3: Search từ khóa và Tăng giá 10% ---');
-  // Tìm kiếm linh hoạt
-  var searchResults = ProductManager.search('msi');
-  print('Kết quả Search từ khóa "msi": $searchResults\n');
-
-  // Tăng giá bằng declarative-map
-  ProductManager.increasePrice();
-  ProductManager.printAll();
-}
+import 'package:flutter/material.dart';
 
 void main() {
-  print('==== KHỞI CHẠY LAB 1 (DART FLUTTER ) ====\n');
+  runApp(const MyApp());
+}
 
-  // In danh sách mặc định ban đầu
-  ProductManager.printAll();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  // Chạy các hàm kiểm thử
-  testFactoryFromJson();
-  testEditAndFind();
-  testSearchAndIncreasePrice();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Quản lý sản phẩm',
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
 
-  print('==== HOÀN THÀNH BÀI LAB 1 ====');
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Quản lý sản phẩm - Lab 1'),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '==== KHỞI CHẠY LAB 1 (DART FLUTTER) ====',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                // Đổi sang link ảnh Unsplash có hỗ trợ CORS tuyệt đối cho Localhost
+                'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&auto=format&fit=crop',
+                width: 400,
+                height: 250,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    width: 400,
+                    height: 250,
+                    color: Colors.grey[200],
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 400,
+                    height: 250,
+                    color: Colors.grey[200],
+                    child: const Center(
+                      child: Text('Không thể tải hình ảnh do rào cản mạng Local.'),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            const Text(
+              'hehehehehehee',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
