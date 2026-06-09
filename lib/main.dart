@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'product.dart';
-import 'product_manager.dart';
+import 'models/product.dart';
+import 'models/product_manager.dart';
 import 'screens/main_screen.dart';
 
-// --- GIỮ NGUYÊN TOÀN BỘ CÁC HÀM LOGIC TEST CŨ CỦA BẠN ---
 void testFactoryFromJson() {
   print('--- Test 1: Khởi tạo sản phẩm từ chuỗi JSON ---');
   String jsonString = '{"id": "P05", "name": "Tai nghe Sony WH-1000XM5", "image": "sony_wh.png", "price": 350.0}';
@@ -54,7 +53,7 @@ class Lab4App extends StatefulWidget {
 }
 
 class _Lab4AppState extends State<Lab4App> {
-  bool isDarkMode = false; // Quản lý trạng thái giao diện [cite: 51]
+  bool isDarkMode = false;
 
   void toggleTheme(bool value) {
     setState(() {
